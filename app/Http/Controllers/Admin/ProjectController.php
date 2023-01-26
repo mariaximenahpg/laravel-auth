@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Project;
+use Illuminate\Http\Request;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use Illuminate\Support\Str;
@@ -72,7 +73,7 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
-        //
+        return view('admin.projects.edit', compact('project'));
     }
 
     /**
@@ -82,9 +83,20 @@ class ProjectController extends Controller
      * @param  \App\Models\Project  $project
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Project $project)
+    public function update(UpdateProjectRequest $request, Project $project)
     {
-        //
+        // dd($request);
+        // modifica dei dati
+        $data = $request->validated();
+
+        $old_project_name = $project->project_name;
+
+        $project->slug = Str::slug($data['project_name']);
+        // modifica della risorsa
+        $project->update($data);
+        // redirect
+        return redirect()->route('admin.projects.index')->with('message', "Il progetto $old_project_name è stato modificato con successo");
+
     }
 
     /**
@@ -95,6 +107,11 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
-        //
+        $old_project_name = $project->project_name;
+
+        $project->delete();
+
+        return redirect()->route('admin.projects.index')->with('message', "Il progetto $old_project_name è stato cancellato con successo");
+
     }
 }

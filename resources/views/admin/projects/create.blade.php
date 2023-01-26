@@ -17,15 +17,15 @@
                 @csrf
                 <div class="mb-3">
                   <label for="project_name" class="form-label">Nome del nuovo progetto</label>
-                  <input type="text" class="form-control" id="project_name" name="project_name" placeholder="Inserisci il nome del nuovo progetto">
+                  <input type="text" class="form-control" id="project_name" name="project_name" placeholder="Inserisci il nome del nuovo progetto" value="{{ old('project_name')}}">
                 </div>
                 <div class="mb-3">
                     <label for="client_name" class="form-label">Nome del cliente</label>
-                    <input type="text" class="form-control" id="client_name" name="client_name" placeholder="Inserisci il nome del cliente">
+                    <input type="text" class="form-control" id="client_name" name="client_name" placeholder="Inserisci il nome del cliente" value="{{ old('client_name')}}">
                 </div>
                 <div class="mb-3">
                     <label for="summary" class="form-label">Dettagli</label>
-                    <textarea class="form-control" name="summary" id="summary" rows="10" placeholder="Inserisci una breve descrizione"></textarea>
+                    <textarea class="form-control" name="summary" id="summary" rows="10" placeholder="Inserisci una breve descrizione" value="{{ old('summary')}}"></textarea>
                 </div>
                 <button type="submit" class="btn btn-primary">Crea</button>
             </form>
