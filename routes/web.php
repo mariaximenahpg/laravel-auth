@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-// Qui andranno tutte le rotte pubbliche
+// Qui andranno tutte le rotte pubbliche del frontoffice
 Route::get('/', function () {
     return view('welcome');
 });
@@ -32,7 +32,7 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
         return view('admin.dashboard');
     })->name('dashboard');
 
-    Route::resource('projects', ProjectController::class);
+    Route::resource('projects', ProjectController::class)->parameters(['projects'=> 'project:slug']);
 });
 // Qui andranno tutte le rotte di autenticazione (registrazione,login..)
 require __DIR__.'/auth.php';

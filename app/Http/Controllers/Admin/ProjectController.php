@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Project;
-use Illuminate\Http\Request; 
+use App\Http\Requests\StoreProjectRequest;
+use App\Http\Requests\UpdateProjectRequest;
+use Illuminate\Support\Str;
+ 
 
 class ProjectController extends Controller
 {
@@ -27,18 +30,26 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.projects.create');
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\StoreProjectRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreProjectRequest $request)
     {
-        //
+        $data= $request->validated();
+
+        $new_project = new Project();
+        $new_project->fill($data);
+        $new_project->slug = Str::slug($new_project->project_name);
+        $new_project->save();
+
+        return redirect()->route('admin.projects.index')->with('message', 'Nuovo progetto aggiunto con successo');
+
     }
 
     /**
@@ -49,7 +60,8 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        //
+
+        return view('admin.projects.show', compact('project'));
     }
 
     /**
