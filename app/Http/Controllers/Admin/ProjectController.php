@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use Illuminate\Support\Str;
- 
+use Illuminate\Support\Facades\Storage;
 
 class ProjectController extends Controller
 {
@@ -44,9 +44,14 @@ class ProjectController extends Controller
     {
         $data= $request->validated();
 
+        if ( isset($data['cover_image'])){
+            $data['cover_image'] = Storage::disk('public')->put('uploads', $data['cover_image']);
+        }
+
         $new_project = new Project();
         $new_project->fill($data);
         $new_project->slug = Str::slug($new_project->project_name);
+        
         $new_project->save();
 
         return redirect()->route('admin.projects.index')->with('message', 'Nuovo progetto aggiunto con successo');
@@ -92,6 +97,10 @@ class ProjectController extends Controller
         $old_project_name = $project->project_name;
 
         $project->slug = Str::slug($data['project_name']);
+
+        if(isset($data['cover_image'])) {
+            $data['cover_image'] = Storage::disk('public')->put('uploads', $data['cover_image']);
+        }
         // modifica della risorsa
         $project->update($data);
         // redirect

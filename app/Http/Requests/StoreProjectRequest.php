@@ -26,7 +26,8 @@ class StoreProjectRequest extends FormRequest
         return [
             'project_name' => 'required|unique:projects|string',
             'client_name' => 'required|string',
-            'summary' => 'required|string'
+            'summary' => 'required|string',
+            'cover_image' => 'nullable|image|max:2048'
         ];
     }
 }

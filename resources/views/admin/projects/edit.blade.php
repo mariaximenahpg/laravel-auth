@@ -2,7 +2,7 @@
 @section('content')
 <div class="container">
     <div class="py-4">
-        <h1>Modifica: "{{ $project->projet_name }}"</h1>
+        <h1>Modifica: "{{ $project->project_name }}"</h1>
         @if ($errors->any())
             <div class="alert alert-danger">
                 <ul>
@@ -13,7 +13,7 @@
             </div>
         @endif
         <div class="mt-4">
-            <form action="{{ route('admin.projects.update', $project) }}" method="POST">
+            <form action="{{ route('admin.projects.update', $project) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <div class="mb-3">
@@ -27,8 +27,24 @@
                 <div class="mb-3">
                     <label for="summary" class="form-label">Dettagli</label>
                     <textarea class="form-control" name="summary" id="summary" rows="10" placeholder="Inserisci una breve descrizione" value="{{ old('summary', $project->summary)}}"></textarea>
-                    {{-- non appare il contenuto da modificare-rivedere questo passaggio --}}
                 </div>
+                <div class="mb-3">
+                    <label for="cover_image" class="form-label">Immagine</label>
+                    <div>
+                        <img id="output" width="100" class="mb-2" @if ($project->cover_image) src="{{ asset("storage/$project->cover_image")}}" @endif/>
+                        <script>
+                        var loadFile = function(event) {
+                            var reader = new FileReader();
+                            reader.onload = function(){
+                            var output = document.getElementById('output');
+                            output.src = reader.result;
+                            };
+                            reader.readAsDataURL(event.target.files[0]);
+                        };
+                        </script>
+                    </div>
+                    <input type="file" class="form-control" id="cover_image" name="cover_image" value="{{ old('cover_image')}}" onchange="loadFile(event)">
+                  </div>
                 <button type="submit" class="btn btn-primary">Modifica</button>
             </form>
         </div>
